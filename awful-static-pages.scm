@@ -31,6 +31,19 @@
               (loop (cdr reqs))))))))
 
 
+(define (write-static-page/procedure! path handler outdir)
+  (let loop ((reqs (request-pages)))
+    (unless (null? reqs)
+      (let ((req (car reqs)))
+        (let ((match (path req)))
+          (if match
+              (begin
+                (write-static-file! outdir req (lambda () (apply handler match)))
+                (loop (cdr reqs)))
+              (loop (cdr reqs))))))))
+
+
+
 (define (generate-static-pages! apps outdir)
   (load-apps apps)
   (create-directory outdir 'with-parents)
@@ -43,7 +56,9 @@
          (cond ((string? path)
                 (write-static-page/string! path handler outdir))
                ((regexp? path)
-                (write-static-page/regex! path handler outdir))))))
+                (write-static-page/regex! path handler outdir))
+               ((procedure? path)
+                (write-static-page/procedure! path handler outdir))))))
    (hash-table->alist (awful-resources-table))))
 
 

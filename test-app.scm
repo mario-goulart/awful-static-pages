@@ -1,4 +1,4 @@
-(use awful regex)
+(use awful regex srfi-13)
 
 (define-page "/foo"
   (lambda ()
@@ -19,3 +19,10 @@
 (define-page (regexp "/regex/[0-9]")
   (lambda (path)
     (->string path)))
+
+(define-page
+  (lambda (path)
+    (and (string-prefix? "/procedure" path)
+         (list path)))
+  (lambda (path)
+    path))
