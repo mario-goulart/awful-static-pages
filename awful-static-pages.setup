@@ -1,0 +1,7 @@
+;; -*- scheme -*-
+(compile -O3 -d1 awful-static-pages.scm)
+
+(install-program
+ 'awful-static-pages
+ '("awful-static-pages")
+ '((version "0.1")))
