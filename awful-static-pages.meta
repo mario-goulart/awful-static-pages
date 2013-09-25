@@ -4,4 +4,4 @@
  (author "Mario Domenech Goulart")
  (category tools)
  (license "BSD")
- (depends awful regex))
+ (depends awful))

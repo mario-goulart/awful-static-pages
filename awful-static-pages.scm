@@ -23,10 +23,12 @@
   (let loop ((reqs (request-pages)))
     (unless (null? reqs)
       (let ((req (car reqs)))
-        (let ((match (string-match path req)))
+        (let ((match (irregex-match path req)))
           (if match
               (begin
-                (write-static-file! outdir req (lambda () (handler match)))
+                (write-static-file! outdir req (lambda ()
+                                                 (handler
+                                                  (irregex-match-substring match))))
                 (loop (cdr reqs)))
               (loop (cdr reqs))))))))
 
@@ -43,7 +45,6 @@
               (loop (cdr reqs))))))))
 
 
-
 (define (generate-static-pages! apps outdir)
   (load-apps apps)
   (create-directory outdir 'with-parents)
@@ -55,7 +56,7 @@
        (when (eq? method 'GET)
          (cond ((string? path)
                 (write-static-page/string! path handler outdir))
-               ((regexp? path)
+               ((irregex? path)
                 (write-static-page/regex! path handler outdir))
                ((procedure? path)
                 (write-static-page/procedure! path handler outdir))))))
@@ -66,8 +67,12 @@
   ;; Returns the argument associated to the command line option OPTION
   ;; in ARGS or #f if OPTION is not found in ARGS or doesn't have any
   ;; argument.
-  (let ((val (any (cut string-match (conc option "=(.*)") <>) args)))
-    (and val (cadr val))))
+  (let ((val (any (lambda (arg)
+                    (irregex-match
+                     `(seq ,(->string option) "=" (submatch (* any)))
+                     arg))
+                  args)))
+    (and val (irregex-match-substring val 1))))
 
 
 (define (usage #!optional exit-code)
