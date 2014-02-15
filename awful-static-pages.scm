@@ -38,11 +38,10 @@
     (unless (null? reqs)
       (let ((req (car reqs)))
         (let ((match (path req)))
-          (if match
-              (begin
-                (write-static-file! outdir req (lambda () (apply handler match)))
-                (loop (cdr reqs)))
-              (loop (cdr reqs))))))))
+          (when (list? match)
+            (parameterize ((%path-procedure-result match))
+              (write-static-file! outdir req (lambda () (apply handler match)))))
+          (loop (cdr reqs)))))))
 
 
 (define (generate-static-pages! apps outdir)
