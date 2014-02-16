@@ -1,5 +1,10 @@
-(declare (uses chicken-syntax))
-(use awful regex srfi-1 srfi-13)
+(module awful-static-pages
+
+(generate-static-pages! index-file request-pages)
+
+(import chicken scheme)
+(use files irregex posix srfi-1 srfi-13 srfi-69)
+(use awful)
 
 (define index-file (make-parameter "index.html"))
 (define request-pages (make-parameter '()))
@@ -44,8 +49,7 @@
           (loop (cdr reqs)))))))
 
 
-(define (generate-static-pages! apps outdir)
-  (load-apps apps)
+(define (generate-static-pages! outdir)
   (create-directory outdir 'with-parents)
   (for-each
    (lambda (res)
@@ -61,42 +65,4 @@
                 (write-static-page/procedure! path handler outdir))))))
    (hash-table->alist (awful-resources-table))))
 
-
-(define (cmd-line-arg option args)
-  ;; Returns the argument associated to the command line option OPTION
-  ;; in ARGS or #f if OPTION is not found in ARGS or doesn't have any
-  ;; argument.
-  (let ((val (any (lambda (arg)
-                    (irregex-match
-                     `(seq ,(->string option) "=" (submatch (* any)))
-                     arg))
-                  args)))
-    (and val (irregex-match-substring val 1))))
-
-
-(define (usage #!optional exit-code)
-  (print "Usage: " (pathname-strip-directory (program-name))
-         " [ --config=<config file> ] <app1 app2 ... appn> <output dir>")
-  (when exit-code
-    (exit exit-code)))
-
-
-(let ((args (command-line-arguments)))
-  (when (null? args)
-    (usage 1))
-  (when (or (member "-h" args)
-            (member "-help" args)
-            (member "--help" args))
-    (usage 0))
-  (let* ((config (cmd-line-arg '--config args))
-         (apps+outdir (remove (lambda (arg)
-                                (string-prefix? "--" arg))
-                              args)))
-    (when (or (null? apps+outdir)
-              (null? (cdr apps+outdir)))
-      (usage 1))
-    (let ((apps (butlast apps+outdir))
-          (outdir (last apps+outdir)))
-      (when config
-        (load config))
-      (generate-static-pages! apps outdir))))
+) ;; end module

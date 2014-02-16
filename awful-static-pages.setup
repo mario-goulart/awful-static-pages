@@ -1,7 +1,18 @@
 ;; -*- scheme -*-
-(compile -O3 -d1 awful-static-pages.scm)
+
+(include "version.scm")
+
+(compile -O3 -d1 -s -J awful-static-pages.scm)
+(compile -O3 -d1 -s awful-static-pages.import.scm)
+
+(compile -O3 -d1 awful-static-pages-cmd.scm)
+
+(install-extension
+ 'awful-static-pages
+ '("awful-static-pages.so" "awful-static-pages.import.so")
+ `((version ,version)))
 
 (install-program
- 'awful-static-pages
+ 'awful-static-pages-cmd
  '("awful-static-pages")
- '((version "0.1")))
+ `((version ,version)))
