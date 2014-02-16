@@ -1,5 +1,9 @@
 (use awful regex srfi-13)
 
+(page-template
+ (lambda (content . args)
+   content))
+
 (define-page "/foo"
   (lambda ()
     "foo"))
