@@ -49,7 +49,7 @@
           (loop (cdr reqs)))))))
 
 
-(define (generate-static-pages! outdir)
+(define (generate-static-pages! outdir #!key resources)
   (create-directory outdir 'with-parents)
   (for-each
    (lambda (res)
@@ -63,6 +63,7 @@
                 (write-static-page/regex! path handler outdir))
                ((procedure? path)
                 (write-static-page/procedure! path handler outdir))))))
-   (hash-table->alist (awful-resources-table))))
+   (or resources
+       (hash-table->alist (awful-resources-table)))))
 
 ) ;; end module
