@@ -5,7 +5,7 @@
 (compile -O3 -d1 -s -J awful-static-pages.scm)
 (compile -O3 -d1 -s awful-static-pages.import.scm)
 
-(compile -O3 -d1 awful-static-pages-cmd.scm)
+(compile -O3 -d1 awful-static-pages-cmd.scm -o awful-static-pages)
 
 (install-extension
  'awful-static-pages
