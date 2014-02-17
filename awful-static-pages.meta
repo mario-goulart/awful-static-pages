@@ -4,4 +4,5 @@
  (author "Mario Domenech Goulart")
  (category tools)
  (license "BSD")
- (depends (awful "0.40.0")))
+ (depends (awful "0.40.0"))
+ (test-depends test))
