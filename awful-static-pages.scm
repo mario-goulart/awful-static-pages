@@ -55,7 +55,13 @@
    (lambda (res)
      (let ((path (caar res))
            (method (caddar res))
-           (handler (cdr res)))
+           (handler (let ((maybe-handler (cdr res)))
+                      ;; awful 0.42.0 changed the resources table
+                      ;; format: the hash table value is now a pair
+                      ;; (<handler> . <strict?>)
+                      (if (pair? maybe-handler)
+                          (car maybe-handler)
+                          maybe-handler))))
        (when (eq? method 'GET)
          (cond ((string? path)
                 (write-static-page/string! path handler outdir))
