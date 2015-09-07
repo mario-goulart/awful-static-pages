@@ -3,7 +3,7 @@
 (generate-static-pages! index-file request-pages)
 
 (import chicken scheme)
-(use files irregex posix srfi-1 srfi-13 srfi-69)
+(use data-structures files irregex posix srfi-1 srfi-13 srfi-69)
 (use awful)
 
 (define index-file (make-parameter "index.html"))
@@ -70,6 +70,8 @@
                ((procedure? path)
                 (write-static-page/procedure! path handler outdir))))))
    (or resources
-       (hash-table->alist (awful-resources-table)))))
+       (sort (hash-table->alist (awful-resources-table))
+             (lambda (a b)
+               (string< (caar a) (caar b)))))))
 
 ) ;; end module
