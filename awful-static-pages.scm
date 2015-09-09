@@ -70,8 +70,20 @@
                ((procedure? path)
                 (write-static-page/procedure! path handler outdir))))))
    (or resources
-       (sort (hash-table->alist (awful-resources-table))
-             (lambda (a b)
-               (string< (caar a) (caar b)))))))
+       (let ((awful-resources (hash-table->alist (awful-resources-table))))
+         ;; Sort resources for a deterministic order: first
+         ;; procedures, then regex matchers, then sorted string
+         ;; matchers
+         (append (filter (lambda (res)
+                           (procedure? (caar res)))
+                         awful-resources)
+                 (filter (lambda (res)
+                           (irregex? (caar res)))
+                         awful-resources)
+                 (sort (filter (lambda (res)
+                                 (string? (caar res)))
+                               awful-resources)
+                       (lambda (a b)
+                         (string< (caar a) (caar b)))))))))
 
 ) ;; end module
