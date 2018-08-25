@@ -2,7 +2,7 @@
 
 ((synopsis "Tool to generate static pages out of awful applications")
  (author "Mario Domenech Goulart")
- (category tools)
+ (category web)
  (license "BSD")
  (depends (awful "0.40.0"))
  (test-depends test))

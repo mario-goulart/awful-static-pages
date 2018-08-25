@@ -3,7 +3,7 @@
 ((synopsis "Tool to generate static pages out of awful applications")
  (author "Mario Domenech Goulart")
  (license "BSD")
- (category tools)
+ (category web)
  (test-dependencies test)
  (dependencies awful
                srfi-1
