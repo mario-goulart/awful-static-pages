@@ -1,4 +1,13 @@
-(use awful regex srfi-13)
+(cond-expand
+  (chicken-4
+   (use irregex srfi-13)
+   (use awful awful-static-pages))
+  (chicken-5
+   (import (chicken irregex)
+           (chicken string))
+   (import awful awful-static-pages srfi-13))
+  (else
+   (error "Unsupported CHICKEN version.")))
 
 (page-template
  (lambda (content . args)
@@ -20,7 +29,7 @@
   (lambda ()
     "4"))
 
-(define-page (regexp "/regex/[0-9]")
+(define-page (irregex "/regex/[0-9]")
   (lambda (path)
     (->string path)))
 

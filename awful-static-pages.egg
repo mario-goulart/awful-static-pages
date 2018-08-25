@@ -1,0 +1,18 @@
+;;; -*- scheme -*-
+
+((synopsis "Tool to generate static pages out of awful applications")
+ (author "Mario Domenech Goulart")
+ (license "BSD")
+ (category tools)
+ (test-dependencies test)
+ (dependencies awful
+               srfi-1
+               srfi-13
+               srfi-69)
+ (component-options
+  (csc-options "-O3" "-d1"))
+ (components (extension awful-static-pages)
+             (program awful-static-pages-cmd
+                      (component-dependencies awful-static-pages)
+                      (install-name awful-static-pages))
+             ))

@@ -1,9 +1,23 @@
 (module awful-static-pages-cmd ()
 
-(import chicken scheme)
-(declare (uses chicken-syntax))
-(use data-structures files irregex srfi-1 srfi-13)
-(use awful awful-static-pages)
+(import scheme)
+(cond-expand
+  (chicken-4
+   (import chicken)
+   (declare (uses chicken-syntax))
+   (use data-structures files irregex srfi-1 srfi-13)
+   (use awful awful-static-pages))
+  (chicken-5
+   (import (chicken base)
+           (chicken file)
+           (chicken irregex)
+           (chicken string)
+           (chicken pathname)
+           (chicken process-context))
+   (import awful awful-static-pages srfi-1 srfi-13))
+  (else
+   (error "Unsupported CHICKEN version.")))
+
 
 (define (cmd-line-arg option args)
   ;; Returns the argument associated to the command line option OPTION

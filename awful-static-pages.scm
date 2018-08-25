@@ -2,9 +2,23 @@
 
 (generate-static-pages! index-file request-pages)
 
-(import chicken scheme)
-(use data-structures files irregex posix srfi-1 srfi-13 srfi-69)
-(use awful)
+(import scheme)
+(cond-expand
+  (chicken-4
+   (import chicken)
+   (use data-structures files irregex posix srfi-1 srfi-13 srfi-69)
+   (use awful))
+  (chicken-5
+   (import (chicken base)
+           (chicken file)
+           (chicken irregex)
+           (chicken pathname)
+           (chicken sort)
+           (chicken type))
+   (import awful srfi-1 srfi-13 srfi-69))
+  (else
+   (error "Unsupported CHICKEN version.")))
+
 
 (define index-file (make-parameter "index.html"))
 (define request-pages (make-parameter '()))
