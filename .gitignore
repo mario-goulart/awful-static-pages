@@ -1,0 +1,8 @@
+awful-static-pages-cmd
+awful-static-pages.build.sh
+awful-static-pages.import.scm
+awful-static-pages.import.so
+awful-static-pages.install.sh
+awful-static-pages.link
+awful-static-pages.so
+awful-static-pages.static.o
